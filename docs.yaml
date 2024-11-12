@@ -1,7 +1,7 @@
 openapi: "3.0.1"
 info:
   title: Ухом API
-  version: "228.0"
+  version: "0.0.1 alpha"
 paths:
   /ping:
     get:
