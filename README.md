@@ -1,7 +1,11 @@
 # uhom-crm-backend
 
-usage:
-    
+### docs:
+```
+http://localhost:8086/api/docs/
+```
+
+### usage:
 1. build images
 ```bash
 docker build ./crm --tag uhomcrm-web
