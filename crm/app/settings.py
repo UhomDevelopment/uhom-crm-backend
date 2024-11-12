@@ -9,7 +9,7 @@ https://docs.djangoproject.com/en/5.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.1/ref/settings/
 """
-
+from os import environ
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure--ezer-fzk_z1^f*ahqxqv1*n_qguhl5c9gux^@scbtqi%y^c3v
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -37,6 +37,10 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
+    'rest_framework',
+
+    'video',
 ]
 
 MIDDLEWARE = [
@@ -74,10 +78,14 @@ WSGI_APPLICATION = 'app.wsgi.application'
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
+    "default": {
+        "ENGINE": "django.db.backends.postgresql",
+        "NAME": environ.get("POSTGRES_DATABASE", "uhomcrm"),
+        "USER": environ.get("POSTGRES_USERNAME", "postgres"),
+        "PASSWORD": environ.get("POSTGRES_PASSWORD", "postgres"),
+        "HOST": environ.get("POSTGRES_HOST", "localhost"),
+        "PORT": environ.get("POSTGRES_PORT", "5435"),
+    },
 }
 
 
