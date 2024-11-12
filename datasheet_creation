@@ -1,0 +1,85 @@
+import os
+import string
+
+import matplotlib.pyplot as plt
+import matplotlib.patches as patches
+
+
+def parse_intervals(directory):
+    files = os.listdir(directory)
+    intervals = []
+
+    for file in files:
+        line = open(f"{directory}/{file}", "r").read()
+
+        exclude = set(string.punctuation) - set('.')
+        cleared_line = ''.join(ch for ch in line if ch not in exclude)
+        splited_line = cleared_line.split()
+
+        interval = [(int(float(splited_line[i])), int(float(splited_line[i+1]))) for i in range(0, len(splited_line), 2)]
+
+        intervals.append(interval)
+
+    return intervals
+
+
+def merge_intervals(intervals, gap=10):
+    if not intervals:
+        return []
+
+    intervals = sorted(intervals, key=lambda x: x[0])
+
+    merged = [intervals[0]]
+    for current in intervals[1:]:
+        last = merged[-1]
+        if current[0] - last[1] < gap:
+            merged[-1] = (last[0], max(last[1], current[1]))
+        else:
+            merged.append(current)
+
+    return merged
+
+
+def get_merged_intervals(directory):
+    intervals_from_directory = parse_intervals(directory)
+    merged_intervals = merge_intervals([interval for interval_list in intervals_from_directory for interval in interval_list])
+
+    return merged_intervals
+
+
+def draw_intervals_on_line(intervals, i, ax, color):
+    max_b = max(b for a, b in intervals)
+
+    ax.plot([0, max_b], [i, i], color='black', linewidth=1)
+
+    for a, b in intervals:
+        rect = patches.Rectangle((a, i - 0.2), b - a, 0.4, color=color)
+        ax.add_patch(rect)
+
+
+def show_picture(directory):
+    intervals_from_directory = parse_intervals(directory)
+
+    merged_intervals = merge_intervals([interval for interval_list in intervals_from_directory for interval in interval_list])
+
+    fig, ax = plt.subplots(figsize=(10, 4))
+
+    colors = ['lightblue', 'lightgreen']
+
+    for i, interval_list in enumerate(intervals_from_directory):
+        draw_intervals_on_line(interval_list, i, ax, color=colors[i % len(colors)])
+
+    draw_intervals_on_line(merged_intervals, len(intervals_from_directory), ax, color="lightcoral")
+
+    ax.set_ylim(-0.5, len(intervals_from_directory) + 0.5)
+    ax.set_xlim(0, max(max(b for a, b in interval) for interval in intervals_from_directory) + 1)
+    ax.set_yticks(range(len(intervals_from_directory) + 1))
+    ax.set_yticklabels(os.listdir(directory) + ['merged'])
+
+    plt.grid(True, which='both', axis='x', linestyle='--', alpha=0.6)
+    plt.show()
+
+directory = 'cameras'
+
+show_picture(directory)
+print(get_merged_intervals(directory))
