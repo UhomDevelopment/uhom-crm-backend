@@ -24,5 +24,5 @@ urlpatterns = [
     path(f'{a}/', include('video.urls')),
     path(f'{a}/schema/', SpectacularAPIView.as_view(), name='schema'),
     path(f'{a}/docs/', SpectacularSwaggerView.as_view(url_name='schema'), name='docs'),
-
+    path(f'{a}/', include('user.urls')),
 ]
