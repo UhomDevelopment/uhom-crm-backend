@@ -1,6 +1,7 @@
 from django.urls import path
 from rest_framework.serializers import ListSerializer
 
+from app import settings
 from video.views import AddCameraView, RetrieveUpdateDestroyCameraView, ListCameraView, RetrieveDestroyView, \
     ListVideoView, AddVideoView, ListCameraTimecodesView
 

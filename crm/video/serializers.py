@@ -12,6 +12,7 @@ class VideoSerializer(serializers.ModelSerializer):
     class Meta:
         model = Video
         fields = '__all__'
+        read_only_fields = ['is_processed']
 
 class TimecodeSerializer(serializers.ModelSerializer):
     class Meta:
