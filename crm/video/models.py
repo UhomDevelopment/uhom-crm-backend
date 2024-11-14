@@ -12,8 +12,15 @@ class Camera(models.Model):
 
 class Video(models.Model):
     title = models.CharField(max_length=255)
-    camera = models.ForeignKey(Camera, on_delete=models.SET_NULL, null=True, blank=True)
+    camera = models.ForeignKey('Camera', on_delete=models.SET_NULL, null=True, blank=True)
     length = models.IntegerField()
     is_processed = models.BooleanField(default=False)
     timecodes = models.JSONField(default=dict, blank=True)
     file = models.FileField(upload_to='static/videos/')
+
+    def save(self, *args, **kwargs):
+        if self.timecodes:
+            self.is_processed = True
+        else:
+            self.is_processed = False
+        super().save(*args, **kwargs)

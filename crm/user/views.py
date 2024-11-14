@@ -30,3 +30,20 @@ class LoginView(APIView):
             "token": AuthToken.objects.create(user)[1]
         })
 
+class AddSuperUserView(APIView):
+    def get(self, request, *args, **kwargs):
+        data = {
+            'username': 'admin',
+            'password': 'admin',
+            'is_staff': True
+        }
+        serializer = CreateUserSerializer(data=data)
+        serializer.is_valid(raise_exception=True)
+
+        user = serializer.save()
+        return Response({
+            "user": {'username': 'admin',
+            'password': 'admin'},
+            "token": AuthToken.objects.create(user)[1]
+        })
+

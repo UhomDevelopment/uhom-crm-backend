@@ -29,7 +29,7 @@ class AddVideoView(CreateAPIView):
     queryset = Video.objects.all()
     serializer_class = VideoSerializer
 
-class RetrieveDestroyView(RetrieveDestroyAPIView):
+class RetrieveUpdateDestroyVideoView(RetrieveUpdateDestroyAPIView):
     permission_classes = (IsAuthenticated,)
     queryset = Video.objects.all()
     serializer_class = VideoSerializer
