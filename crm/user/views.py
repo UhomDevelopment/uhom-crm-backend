@@ -1,4 +1,4 @@
-from rest_framework import viewsets, permissions, generics
+from rest_framework import permissions
 from rest_framework.response import Response
 from knox.models import AuthToken
 from rest_framework.views import APIView

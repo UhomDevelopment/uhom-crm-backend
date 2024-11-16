@@ -1,5 +1,4 @@
 from django.urls import path
-from rest_framework.serializers import ListSerializer
 
 from user.views import RegisterView, LoginView, AddSuperUserView
 
