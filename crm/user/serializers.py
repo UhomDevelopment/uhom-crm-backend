@@ -5,13 +5,13 @@ from django.contrib.auth import authenticate
 class CreateUserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ('id', 'username', 'password')
+        fields = ('id', 'username', 'password', 'is_staff')
         extra_kwargs = {'password': {'write_only': True}}
 
     def create(self, validated_data):
         user = User.objects.create_user(validated_data['username'],
                                         None,
-                                        validated_data['password'])
+                                        validated_data['password'], is_staff=validated_data.get('is_staff', False))
         return user
 
 class LoginUserSerializer(serializers.Serializer):
@@ -29,3 +29,15 @@ class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ('id', 'username')
+
+class ResponseLoginUserSerializer(serializers.Serializer):
+    user = UserSerializer()
+    token = serializers.CharField()
+
+class CreateSuperUserSerializer(serializers.Serializer):
+    username = serializers.CharField()
+    password = serializers.CharField()
+    token = serializers.CharField()
+
+class ReasonResponseSerializer(serializers.Serializer):
+    reason = serializers.JSONField()

@@ -11,10 +11,18 @@ class CameraSerializer(serializers.ModelSerializer):
 class VideoSerializer(serializers.ModelSerializer):
     class Meta:
         model = Video
-        fields = '__all__'
-        read_only_fields = ['is_processed']
+        exclude = ['file',]
+        read_only_fields = ['is_processed',]
+
+class UploadVideoSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Video
+        fields = ['file',]
 
 class TimecodeSerializer(serializers.ModelSerializer):
     class Meta:
         model = Video
         fields = ['timecodes']
+
+    def to_representation(self, instance):
+        return instance.timecodes if instance.timecodes else None

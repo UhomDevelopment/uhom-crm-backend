@@ -98,6 +98,7 @@ DATABASES = {
 }
 
 REST_FRAMEWORK = {
+    "EXCEPTION_HANDLER": "app.exceptions.custom_exception_handler",
     'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'knox.auth.TokenAuthentication',

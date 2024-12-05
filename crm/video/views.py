@@ -1,8 +1,10 @@
+from drf_spectacular.utils import extend_schema_view, extend_schema, OpenApiExample
 from rest_framework.generics import CreateAPIView, RetrieveUpdateDestroyAPIView, ListAPIView
 from rest_framework.permissions import IsAuthenticated
 
+from user.serializers import ReasonResponseSerializer
 from video.models import Camera, Video
-from video.serializers import CameraSerializer, VideoSerializer, TimecodeSerializer
+from video.serializers import CameraSerializer, VideoSerializer, TimecodeSerializer, UploadVideoSerializer
 
 import os
 from rest_framework.response import Response
@@ -14,12 +16,55 @@ from rest_framework import status
 from .models import Video
 from .serializers import VideoSerializer
 
-
+@extend_schema_view(
+    post=extend_schema(
+        summary="Создать камеру",
+        responses={
+            200: CameraSerializer,
+            400: ReasonResponseSerializer,
+            401: ReasonResponseSerializer,
+        }
+    ),
+)
 class AddCameraView(CreateAPIView):
     permission_classes = (IsAuthenticated,)
     queryset = Camera.objects.all()
     serializer_class = CameraSerializer
 
+@extend_schema_view(
+    get=extend_schema(
+        summary="Получить информацию о камере",
+        responses={
+            200: CameraSerializer,
+            400: ReasonResponseSerializer,
+            401: ReasonResponseSerializer,
+        }
+    ),
+    put=extend_schema(
+        summary="Изменить информацию о камере целиком",
+        responses={
+            200: CameraSerializer,
+            400: ReasonResponseSerializer,
+            401: ReasonResponseSerializer,
+        }
+    ),
+    patch=extend_schema(
+        summary="Изменить часть информации о камере",
+        responses={
+            200: CameraSerializer,
+            400: ReasonResponseSerializer,
+            401: ReasonResponseSerializer,
+        }
+    ),
+    delete=extend_schema(
+        summary="Удалить камеру",
+        responses={
+            200: CameraSerializer,
+            400: ReasonResponseSerializer,
+            401: ReasonResponseSerializer,
+        }
+    )
+)
 class RetrieveUpdateDestroyCameraView(RetrieveUpdateDestroyAPIView):
     permission_classes = (IsAuthenticated,)
     queryset = Camera.objects.all()
@@ -51,6 +96,31 @@ class ListVideoView(ListAPIView):
         else:
             return Video.objects.all()
 
+@extend_schema_view(
+    get=extend_schema(
+        summary="Список таймкодов",
+        examples=[
+            OpenApiExample(
+                'Пример',
+                value=
+                    [
+                      [
+                        0.06666666666666667,
+                        15.6
+                      ],
+                      [
+                        98.33333333333333,
+                        195.4
+                      ],
+                      [
+                        721.6,
+                        732.8
+                      ],
+                    ]
+            )
+        ]
+    )
+)
 class ListCameraTimecodesView(ListAPIView):
     permission_classes = (IsAuthenticated,)
     queryset = Camera.objects.all()
@@ -60,10 +130,22 @@ class ListCameraTimecodesView(ListAPIView):
         videos = Video.objects.filter(camera_id=self.kwargs.get('pk', None))
         return videos
 
-class AddVideoView(CreateAPIView):
+@extend_schema_view(
+    create=extend_schema(
+        summary="Добавить видео",
+        description="Добавить информацию о видео если файл уже был загружен",
+    ),
+)
+class AddVideoInfoView(CreateAPIView):
     permission_classes = (IsAuthenticated,)
     queryset = Video.objects.all()
     serializer_class = VideoSerializer
+
+
+class UploadVideoView(CreateAPIView):
+    permission_classes = (IsAuthenticated,)
+    queryset = Video.objects.all()
+    serializer_class = UploadVideoSerializer
     parser_classes = [MultiPartParser]
 
     def post(self, request, *args, **kwargs):
