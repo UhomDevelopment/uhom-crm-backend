@@ -42,5 +42,15 @@ services:
       - "9443:9443"
     restart: always
 
+
+  pdf:
+    image: ultroa13/uhom_crm_pdf:latest
+    container_name: uhomcrm_pdf
+    ports: [ "8000:8000" ]
+    environment:
+      SERVER_ADDRESS: "0.0.0.0:8000"
+    volumes:
+      - ./pdf/:/pdf_routing/
+
 volumes:
   postgres-data:
