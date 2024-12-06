@@ -11,7 +11,7 @@ class CameraSerializer(serializers.ModelSerializer):
 class VideoSerializer(serializers.ModelSerializer):
     class Meta:
         model = Video
-        exclude = ['file',]
+        fields = '__all__'
         read_only_fields = ['is_processed',]
 
 class UploadVideoSerializer(serializers.ModelSerializer):
