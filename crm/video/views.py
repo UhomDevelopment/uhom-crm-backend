@@ -5,7 +5,8 @@ from rest_framework.views import APIView
 
 from user.serializers import ReasonResponseSerializer
 from video.models import Camera, Video
-from video.serializers import CameraSerializer, VideoSerializer, TimecodeSerializer, UploadVideoSerializer
+from video.serializers import CameraSerializer, VideoSerializer, TimecodeSerializer, UploadVideoSerializer, \
+    TimecodeAddSerializer
 
 import os
 from rest_framework.response import Response
@@ -142,8 +143,19 @@ class AddVideoInfoView(CreateAPIView):
     queryset = Video.objects.all()
     serializer_class = VideoSerializer
 
+@extend_schema_view(
+    post=extend_schema(
+        summary="Добавить таймкоды",
+        description="Добавить таймкоды в видео если уже было загружен",
+        responses={
+            200: VideoSerializer,
+            400: ReasonResponseSerializer,
+        }
+    ),
+)
 class AddTimecodesView(APIView):
     permission_classes = (IsAuthenticated,)
+    serializer_class = TimecodeAddSerializer
 
     def post(self, request):
         video_id = request.data.get('video', None)

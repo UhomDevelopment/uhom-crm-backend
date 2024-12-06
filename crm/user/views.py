@@ -44,6 +44,8 @@ class RegisterView(APIView):
         },
     ),
 )
+
+
 class LoginView(APIView):
     serializer_class = LoginUserSerializer
 
