@@ -1,3 +1,5 @@
+from math import ceil
+
 from drf_spectacular.utils import extend_schema_view, extend_schema, OpenApiExample
 from rest_framework.generics import CreateAPIView, RetrieveUpdateDestroyAPIView, ListAPIView
 from rest_framework.permissions import IsAuthenticated
@@ -237,4 +239,4 @@ class GetHoursFromCamera(APIView):
 
         for timecodes_list in data[0]:
             seconds += timecodes_list[1] - timecodes_list[0]
-        return Response(int(seconds/3600))
+        return Response(round(seconds/3600, 2))
