@@ -227,5 +227,14 @@ class AddTimecodesView(APIView):
 #
 #         return Response({'message': 'Chunk uploaded', 'chunkIndex': chunk_index})
 
+class GetHoursFromCamera(APIView):
+    permission_classes = (IsAuthenticated,)
 
+    def get(self, request, *args, **kwargs):
+        videos = Video.objects.filter(camera_id=self.kwargs.get('pk', None))
+        data = TimecodeSerializer(videos, many=True).data
+        seconds = 0
 
+        for timecodes_list in data[0]:
+            seconds += timecodes_list[1] - timecodes_list[0]
+        return Response(int(seconds/3600))

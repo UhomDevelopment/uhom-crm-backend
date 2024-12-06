@@ -1,7 +1,7 @@
 from django.urls import path
 
 from video.views import AddCameraView, RetrieveUpdateDestroyCameraView, ListCameraView, RetrieveUpdateDestroyVideoView, \
-    ListVideoView, ListCameraTimecodesView, AddVideoInfoView, AddTimecodesView
+    ListVideoView, ListCameraTimecodesView, AddVideoInfoView, AddTimecodesView, GetHoursFromCamera
 
 urlpatterns = [
     path('camera/add/', AddCameraView.as_view(), name='add'),
@@ -14,4 +14,5 @@ urlpatterns = [
     path('videos/<int:cam_pk>', ListVideoView.as_view()),
     path('videos/', ListVideoView.as_view()),
     path('timecodes/<int:pk>', ListCameraTimecodesView.as_view()),
+    path('gethours/<int:pk>', GetHoursFromCamera.as_view())
 ]
