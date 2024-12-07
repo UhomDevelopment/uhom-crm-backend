@@ -235,12 +235,13 @@ class GetHoursFromCamera(APIView):
     def get(self, request, *args, **kwargs):
         videos = Video.objects.filter(camera_id=self.kwargs.get('pk', None))
         if not videos:
-            return Response({"reason": 'No camera matching query'}, status=status.HTTP_404_NOT_FOUND)
+            return Response({"reason": 'No video matching query'}, status=status.HTTP_404_NOT_FOUND)
         data = [video.timecodes for video in videos]
         if data:
             seconds = 0
-            for timecodes_list in data[0]:
-                seconds += timecodes_list[1] - timecodes_list[0]
+            for video in data:
+                for timecodes in video:
+                    seconds += timecodes[1] - timecodes[0]
 
             return Response(round(seconds/3600, 2))
         return Response({"reason": 'No timecodes found'}, status=status.HTTP_404_NOT_FOUND)
